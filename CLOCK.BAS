@@ -7,7 +7,7 @@ CONST PI = 3.141592654#
 CONST ORG.X = 640 / 2
 CONST ORG.Y = 480 / 2
 
-prevTime$ = TIME$
+LET prevTime$ = TIME$
 
 SCREEN 12
 CLS
@@ -78,11 +78,12 @@ END SUB
 
 SUB drawHour (t$, c%)
   LET hh% = VAL(MID$(t$, 1, 2))
-
+  LET mm% = VAL(MID$(t$, 4, 2))
+ 
   LET a = 120
   LET f = PI * 2
-  LET x = ORG.X + SIN(-(f / 12) * hh% + PI) * a
-  LET y = ORG.Y + COS(-(f / 12) * hh% + PI) * a
+  LET x = ORG.X + SIN(-(f / (12 * 60)) * (hh% * 60 + mm%) + PI) * a
+  LET y = ORG.Y + COS(-(f / (12 * 60)) * (hh% * 60 + mm%) + PI) * a
 
   LINE (ORG.X, ORG.Y)-(x, y), c%
 END SUB
