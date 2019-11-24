@@ -20,20 +20,21 @@ TIMER ON
 DO
 LOOP UNTIL INKEY$ = CHR$(27)
 TIMER OFF
+
 END
 
 displayTime:
-  LET currTime$ = TIME$
+LET currTime$ = TIME$
 
-  drawHour prevTime$, 0
-  drawSecond prevTime$, 0
+drawHour prevTime$, 0, 120
+drawSecond prevTime$, 0, 190
 
-  drawHour currTime$, 7
-  drawSecond currTime$, 15
+drawHour currTime$, 7, 120
+drawSecond currTime$, 15, 190
 
-  prevTime$ = currTime$
+prevTime$ = currTime$
 
-  RETURN
+RETURN
 
 SUB drawClock
   LET a = 200
@@ -44,7 +45,7 @@ SUB drawClock
     LET c = COS(i)
     LET x = ORG.X + (s * a)
     LET y = ORG.Y + (c * a)
- 
+
     LET sd% = s * (180 / PI)
     LET cd% = c * (180 / PI)
 
@@ -76,25 +77,23 @@ SUB drawClock
   NEXT i
 END SUB
 
-SUB drawHour (t$, c%)
+SUB drawHour (t$, c%, a%)
   LET hh% = VAL(MID$(t$, 1, 2))
   LET mm% = VAL(MID$(t$, 4, 2))
  
-  LET a = 120
-  LET f = PI * 2
-  LET x = ORG.X + SIN(-(f / (12 * 60)) * (hh% * 60 + mm%) + PI) * a
-  LET y = ORG.Y + COS(-(f / (12 * 60)) * (hh% * 60 + mm%) + PI) * a
+  LET f = -(((PI * 2) / (12 * 60)) * (hh% * 60 + mm%) + PI)
+  LET x = ORG.X + SIN(f) * a%
+  LET y = ORG.Y + COS(f) * a%
 
   LINE (ORG.X, ORG.Y)-(x, y), c%
 END SUB
 
-SUB drawSecond (t$, c%)
+SUB drawSecond (t$, c%, a%)
   LET ss% = VAL(MID$(t$, 7, 2))
 
-  LET a = 190
-  LET f = PI * 2
-  LET x = ORG.X + SIN(-(f / 60) * ss% + PI) * a
-  LET y = ORG.Y + COS(-(f / 60) * ss% + PI) * a
+  LET f = -((PI * 2) / 60) * ss% + PI
+  LET x = ORG.X + SIN(f) * a%
+  LET y = ORG.Y + COS(f) * a%
 
   LINE (ORG.X, ORG.Y)-(x, y), c%
 END SUB
